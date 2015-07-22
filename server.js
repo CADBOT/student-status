@@ -6,8 +6,14 @@ var mongoose = require('mongoose');
 var mongoUri = 'mongodb://' + process.env.MONGO_USER + ':' + process.env.MONGO_PASS + '@ds031628.mongolab.com:31628/student-status';
 mongoose.connect(mongoUri);
 
-var statusesRoutes = require('./routes/statuses-routes.js');
-app.use('/', statusesRoutes);
+var apiRouter = express.Router();
+['statuses', 'users'].forEach(function(route) {
+    require('./routes/' + route + '-routes')(apiRouter)
+});
+//require('./routes/statuses-routes')(apiRouter);
+console.log(apiRouter);
+
+app.use('/', apiRouter);
 
 var port = process.env.port || 3000;
 app.listen(port, function() {
