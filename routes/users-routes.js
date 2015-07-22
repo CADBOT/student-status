@@ -5,9 +5,13 @@ var bodyParser = require('body-parser');
 module.exports = function(router) {
   router.use(bodyParser.json());
 
+  // /users route is 'normalized'
+  // This is because normalizing a collection
+  // is fairly expensive
   router.route('/users')
     .get(function(req, res) {
       User.find({}, function(err, data) {
+        console.log('/users hit')
         if (err) {
           res.status(500).json({msg: 'server error'});
         }
@@ -24,17 +28,49 @@ module.exports = function(router) {
       })
     });
 
+  // Individual user is denormalized. The performance
+  // hit for denormalizing one user is small, and often
+  // simplifies queries
   router.route('/users/:id')
     .get(function(req, res) {
-      User.findById(req.params.id, function(err, doc) {
+      User.findById(req.params.id)
+        .populate('statuses')
+        .exec(function(err, doc) {
+        res.json(doc);
+      })
+    })
+    .delete(function(req, res) {
+      User.findByIdAndRemove(req.params.id, function(err, data) {
         if (err) {
           res.status(500).json({msg: 'server error'});
-        }
-        res.json(doc);
-      });
+        } 
+        res.json(data);
+      })
+    })
+      /*
+      User.findById(req.params.id)
+        .populate(statuses)
+        .exec(function(err, doc) {
+          if (err) {
+            res.status(500).json({msg: 'server error'});
+          }
+          res.json(doc);
+        });
     });
+    */
 
   router.route('/users/:id/statuses')
+    .get(function(req, res) {
+      User.findById(req.params.id)
+        .populate('statuses')
+        .exec(function (err, user) {
+          if (err) {
+            res.status(500).json({msg: 'server error'});
+          }
+          res.json(user.statuses);
+        });
+    })
+
     .post(function(req, res) {
       User.findById(req.params.id, function(err, doc) {
         console.log(doc._id);
