@@ -1,7 +1,9 @@
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema
 
-var userSchema = mongoose.Schema({
-  name: String
+var userSchema = Schema({
+  name: String,
+  statuses : [{ type: Schema.Types.ObjectId, ref: 'Status'}]
 });
 
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model('User', userSchema);
