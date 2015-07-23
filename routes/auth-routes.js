@@ -2,9 +2,6 @@ var User = require('../models/User')
 var jwt = require('jsonwebtoken')
 
 module.exports = function(router) {
- router.get('/', function(req, res) {
-   res.json({hello: 'world'})
- })
 
  router.post('/auth', function(req, res) {
    // Find the user
@@ -18,8 +15,6 @@ module.exports = function(router) {
      }
      //  verify password matches
      else if (user.password != req.body.password) {
-       console.log(user.password)
-       console.log(req.body.password)
        res.json({ success: false, msg: 'Authentication failed. Password does not match.'})
      }
      
