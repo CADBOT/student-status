@@ -2,9 +2,8 @@ var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
 
-var mongoUri = 'mongodb://***REMOVED***:***REMOVED***@ds031628.mongolab.com:31628/student-status';
 // DB Setup
-//var mongoUri = 'mongodb://' + process.env.MONGO_USER + ':' + process.env.MONGO_PASS + '@ds031628.mongolab.com:31628/student-status';
+var mongoUri = process.env.MONGO_URI
 mongoose.connect(mongoUri);
 
 // Route setup
