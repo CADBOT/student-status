@@ -1,9 +1,7 @@
 var User = require('../models/User');
 var Status = require('../models/Status');
-var bodyParser = require('body-parser');
 
 module.exports = function(router) {
-  router.use(bodyParser.json());
 
   // /users route is 'normalized'
   // This is because normalizing a collection

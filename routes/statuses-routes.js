@@ -1,8 +1,6 @@
-var bodyParser = require('body-parser');
 var Status = require('../models/Status');
 
 module.exports = function(router) {
-  router.use(bodyParser.json());
   router.get('/statuses', function(req, res) {
     Status.find({}, function(err, data) {
       if (err) {
