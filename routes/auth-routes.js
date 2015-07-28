@@ -14,7 +14,8 @@ module.exports = function(router) {
        res.json({ success: false, msg: 'Authentication failed. User not found.'})
      }
      //  verify password matches
-     else if (user.password != req.body.password) {
+     else if (user.checkPassword(req.body.password)) 
+     //else if (user.password != req.body.password) {
        res.json({ success: false, msg: 'Authentication failed. Password does not match.'})
      }
      

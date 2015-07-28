@@ -18,6 +18,7 @@ module.exports = function(router) {
     })
     .post(function(req, res) {
       var user = new User(req.body);
+      user.password = user.generateHash(user.password);
       user.save(function(err, data) {
         if (err) {
           res.status(500).json({msg: 'server error'});
